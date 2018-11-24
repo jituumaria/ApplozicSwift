@@ -15,7 +15,7 @@ public protocol ALKAudioRecorderViewProtocol{
 
 open class ALKAudioRecorderView: UIView, Localizable {
     
-    var configuration: ALKConfiguration!
+    var configuration: ALKConfigurable!
     
     private var isTimerStart:Bool = false
     private var timer = Timer()
@@ -110,7 +110,7 @@ open class ALKAudioRecorderView: UIView, Localizable {
         })
     }
     
-    public init(frame: CGRect, configuration: ALKConfiguration) {
+    public init(frame: CGRect, configuration: ALKConfigurable) {
         super.init(frame: frame)
         self.configuration = configuration
         self.translatesAutoresizingMaskIntoConstraints = false;

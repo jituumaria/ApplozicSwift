@@ -48,7 +48,7 @@ class ALKCustomPickerViewController: ALKBaseViewController, Localizable {
 
     }
 
-    static func makeInstanceWith(delegate: ALKCustomPickerDelegate, and configuration: ALKConfiguration) -> ALKBaseNavigationViewController? {
+    static func makeInstanceWith(delegate: ALKCustomPickerDelegate, and configuration: ALKConfigurable) -> ALKBaseNavigationViewController? {
         let storyboard = UIStoryboard.name(storyboard: UIStoryboard.Storyboard.picker, bundle: Bundle.applozic)
         guard
             let vc = storyboard.instantiateViewController(withIdentifier: "CustomPickerNavigationViewController")

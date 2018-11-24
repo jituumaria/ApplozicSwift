@@ -28,7 +28,7 @@ class ALKConversationViewControllerTests: XCTestCase {
                 super.init(configuration: ALKConfiguration())
             }
 
-            required init(configuration: ALKConfiguration) {
+            required init(configuration: ALKConfigurable) {
                 super.init(configuration: configuration)
             }
 

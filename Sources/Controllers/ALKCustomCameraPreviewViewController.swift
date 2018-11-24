@@ -34,7 +34,7 @@ final class ALKCustomCameraPreviewViewController: ALKBaseViewController, Localiz
         super.init(coder: aDecoder)
     }
 
-    required public init(configuration: ALKConfiguration) {
+    required public init(configuration: ALKConfigurable) {
         super.init(configuration: configuration)
     }
 

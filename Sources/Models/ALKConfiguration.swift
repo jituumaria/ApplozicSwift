@@ -7,8 +7,8 @@
 
 import Foundation
 
-public struct ALKConfiguration {
-
+public struct ALKConfiguration: ALKConfigurable {
+    
     /// If enabled then tapping on navigation bar in
     /// conversation view will open the group detail screen.
     /// - NOTE: Only works in case of groups.

@@ -12,7 +12,7 @@ final class ALKPreviewImageViewController: ALKBaseViewController, Localizable {
     
     var localizedStringFileName: String!
     
-    required init(configuration: ALKConfiguration) {
+    required init(configuration: ALKConfigurable) {
         super.init(configuration: configuration)
         localizedStringFileName = configuration.localizedStringFileName
     }

@@ -31,7 +31,7 @@ final class ALKNewChatViewController: ALKBaseViewController, Localizable {
     
     //MARK: - Life cycle
     
-    convenience init(configuration: ALKConfiguration, viewModel: ALKNewChatViewModel) {
+    convenience init(configuration: ALKConfigurable, viewModel: ALKNewChatViewModel) {
         self.init(configuration: configuration)
         self.viewModel = viewModel
         setupView()
@@ -41,7 +41,7 @@ final class ALKNewChatViewController: ALKBaseViewController, Localizable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    required public init(configuration: ALKConfiguration) {
+    required public init(configuration: ALKConfigurable) {
         super.init(configuration: configuration)
     }
 

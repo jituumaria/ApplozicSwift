@@ -40,7 +40,7 @@ final class ALKCustomVideoPreviewViewController: ALKBaseViewController, Localiza
         self.title = localizedString(forKey: "SendVideo", withDefaultValue: SystemMessage.LabelName.SendVideo, fileName: configuration.localizedStringFileName)
     }
 
-    required public init(configuration: ALKConfiguration) {
+    required public init(configuration: ALKConfigurable) {
         super.init(configuration: configuration)
     }
 

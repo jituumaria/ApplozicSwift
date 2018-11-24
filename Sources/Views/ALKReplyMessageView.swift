@@ -14,7 +14,7 @@ import Applozic
 
 open class ALKReplyMessageView: UIView, Localizable {
     
-    var configuration: ALKConfiguration!
+    var configuration: ALKConfigurable!
     
     open let nameLabel: UILabel = {
         let label = UILabel(frame: CGRect.zero)
@@ -87,7 +87,7 @@ open class ALKReplyMessageView: UIView, Localizable {
 
     }
 
-    init(frame: CGRect, configuration: ALKConfiguration) {
+    init(frame: CGRect, configuration: ALKConfigurable) {
         super.init(frame: frame)
         self.configuration = configuration
         setUpViews()

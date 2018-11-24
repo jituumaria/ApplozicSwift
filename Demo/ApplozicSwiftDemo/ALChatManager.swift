@@ -134,13 +134,13 @@ class ALChatManager: NSObject {
         ALApplozicSettings.setSwiftFramework(true)
     }
 
-    func launchChatList(from viewController: UIViewController, with configuration: ALKConfiguration) {
+    func launchChatList(from viewController: UIViewController, with configuration: ALKConfigurable) {
         let conversationVC = ALKConversationListViewController(configuration: configuration)
         let navVC = ALKBaseNavigationViewController(rootViewController: conversationVC)
         viewController.present(navVC, animated: false, completion: nil)
     }
 
-    func launchChatWith(contactId: String, from viewController: UIViewController, configuration: ALKConfiguration) {
+    func launchChatWith(contactId: String, from viewController: UIViewController, configuration: ALKConfigurable) {
         let alContactDbService = ALContactDBService()
         var title = ""
         if let alContact = alContactDbService.loadContact(byKey: "userId", value: contactId), let name = alContact.getDisplayName() {
@@ -154,7 +154,7 @@ class ALChatManager: NSObject {
         viewController.navigationController?.pushViewController(conversationViewController, animated: false)
     }
 
-    func launchGroupWith(clientGroupId: String, from viewController: UIViewController, configuration: ALKConfiguration) {
+    func launchGroupWith(clientGroupId: String, from viewController: UIViewController, configuration: ALKConfigurable) {
         let alChannelService = ALChannelService()
         alChannelService.getChannelInformation(nil, orClientChannelKey: clientGroupId) { (channel) in
             guard let channel = channel, let key = channel.key else {return}

@@ -9,11 +9,11 @@
 import UIKit
 import Applozic
 
-open class ALKBaseViewController: UIViewController, ALKConfigurable {
+open class ALKBaseViewController: UIViewController {
 
-    public var configuration: ALKConfiguration!
+    public var configuration: ALKConfigurable!
 
-    required public init(configuration: ALKConfiguration) {
+    required public init(configuration: ALKConfigurable) {
         self.configuration = configuration
         super.init(nibName: nil, bundle: nil)
         self.addObserver()

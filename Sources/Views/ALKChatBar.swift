@@ -12,7 +12,7 @@ import Applozic
 
 open class ALKChatBar: UIView, Localizable {
     
-    var configuration: ALKConfiguration!
+    var configuration: ALKConfigurable!
     
     public var isMicButtonHidden: Bool!
     
@@ -287,7 +287,7 @@ open class ALKChatBar: UIView, Localizable {
         self.sendButton.isHidden = false
     }
     
-    required public init(frame: CGRect, configuration: ALKConfiguration){
+    required public init(frame: CGRect, configuration: ALKConfigurable){
         super.init(frame: frame)
         self.configuration = configuration
         self.isMicButtonHidden = configuration.hideAudioOptionInChatBar

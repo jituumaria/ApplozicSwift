@@ -14,7 +14,7 @@ import Applozic
 
 class MuteConversationViewController: UIViewController, Localizable {
     
-    var configuration: ALKConfiguration!
+    var configuration: ALKConfigurable!
     
     var delegate: Muteable!
     var conversation: ALMessage!
@@ -74,7 +74,7 @@ class MuteConversationViewController: UIViewController, Localizable {
         return values
     }()
     
-    init(delegate: Muteable, conversation: ALMessage, atIndexPath: IndexPath, configuration: ALKConfiguration) {
+    init(delegate: Muteable, conversation: ALMessage, atIndexPath: IndexPath, configuration: ALKConfigurable) {
         super.init(nibName: nil, bundle: nil)
         self.delegate = delegate
         self.conversation = conversation

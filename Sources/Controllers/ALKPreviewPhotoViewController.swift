@@ -44,7 +44,7 @@ final class ALKPreviewPhotoViewController: ALKBaseViewController {
     var imageViewLeadingConstraint: NSLayoutConstraint?
     var imageViewTrailingConstraint: NSLayoutConstraint?
 
-    convenience init(configuration: ALKConfiguration, image: UIImage) {
+    convenience init(configuration: ALKConfigurable, image: UIImage) {
         self.init(configuration: configuration)
         self.image = image
     }
@@ -53,7 +53,7 @@ final class ALKPreviewPhotoViewController: ALKBaseViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    required public init(configuration: ALKConfiguration) {
+    required public init(configuration: ALKConfigurable) {
         super.init(configuration: configuration)
     }
 

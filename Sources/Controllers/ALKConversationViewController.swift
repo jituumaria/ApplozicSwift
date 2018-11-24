@@ -123,7 +123,7 @@ open class ALKConversationViewController: ALKBaseViewController, Localizable {
 
     var contentOffsetDictionary: Dictionary<AnyHashable,AnyObject>!
 
-    required public init(configuration: ALKConfiguration) {
+    required public init(configuration: ALKConfigurable) {
         super.init(configuration: configuration)
         self.localizedStringFileName = configuration.localizedStringFileName
         self.contactService = ALContactService()
@@ -907,7 +907,7 @@ open class ALKConversationViewController: ALKBaseViewController, Localizable {
         }
     }
 
-    private func configurePropertiesWith(configuration: ALKConfiguration) {
+    private func configurePropertiesWith(configuration: ALKConfigurable) {
         self.isGroupDetailActionEnabled = configuration.isTapOnNavigationBarEnabled
         self.isProfileTapActionEnabled = configuration.isProfileTapActionEnabled
     }

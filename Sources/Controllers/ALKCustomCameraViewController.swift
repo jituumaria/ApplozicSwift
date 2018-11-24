@@ -116,7 +116,7 @@ final class ALKCustomCameraViewController: ALKBaseViewController, AVCapturePhoto
 
     }
 
-    static func makeInstanceWith(delegate: ALKCustomCameraProtocol, and configuration: ALKConfiguration) -> ALKBaseNavigationViewController? {
+    static func makeInstanceWith(delegate: ALKCustomCameraProtocol, and configuration: ALKConfigurable) -> ALKBaseNavigationViewController? {
         let storyboard = UIStoryboard.name(storyboard: UIStoryboard.Storyboard.camera, bundle: Bundle.applozic)
         guard
             let vc = storyboard.instantiateViewController(withIdentifier: "CustomCameraNavigationController")

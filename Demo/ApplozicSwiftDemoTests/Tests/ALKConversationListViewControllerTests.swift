@@ -60,7 +60,7 @@ class ALKConversationListViewControllerTests: XCTestCase {
         class ALKConversationListViewControllerMock: ALKConversationListViewController {
             var isMuteCalled: Bool = false
             
-            required init(configuration: ALKConfiguration) {
+            required init(configuration: ALKConfigurable) {
                 super.init(configuration: configuration)
             }
             

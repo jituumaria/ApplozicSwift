@@ -13,7 +13,7 @@ class ALKConversationViewControllerMock: ALKConversationViewController {
     
     var testDisplayName: String!
     
-    required init(configuration: ALKConfiguration) {
+    required init(configuration: ALKConfigurable) {
         super.init(configuration: configuration)
     }
     

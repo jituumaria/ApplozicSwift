@@ -12,7 +12,7 @@ import Kingfisher
 
 class ALKMapViewController: UIViewController, Localizable {
 
-    var configuration: ALKConfiguration!
+    var configuration: ALKConfigurable!
     
     @IBOutlet weak var mapView: MKMapView!
 
@@ -92,7 +92,7 @@ class ALKMapViewController: UIViewController, Localizable {
         }
     }
     
-    public func setConfiguration(_ configuration: ALKConfiguration) {
+    public func setConfiguration(_ configuration: ALKConfigurable) {
         self.configuration = configuration
     }
 }
