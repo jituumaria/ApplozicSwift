@@ -2,7 +2,20 @@
 
 The changelog for [ApplozicSwift](https://github.com/AppLozic/ApplozicSwift). Also see the [releases](https://github.com/AppLozic/ApplozicSwift/releases) on Github.
 
-1.2.0(upcoming release)
+1.3.0(upcoming release)
+---
+### Enhancements
+
+- [AL-2856] Added a header view in chat bar to inject custom views from outside.
+- [AL-3044] Added ALKConversationListDelegate to get chat thread selection callback.
+	 And updated properties of `ALKChatViewModelProtocol` to public.
+- [Al-3093] Update rich message layout to display message on top of templates.
+
+### Fixes
+
+- [AL-3056] Fix an issue where earlier conversation won't load when scrolled to top.
+
+1.2.0
 ---
 ### Enhancements
 - [AL-3004] Update chat screen to enable/disble chat for user when user is added/removed in the group.
