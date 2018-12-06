@@ -9,6 +9,7 @@ The changelog for [ApplozicSwift](https://github.com/AppLozic/ApplozicSwift). Al
 - [AL-2856] Added a header view in chat bar to inject custom views from outside.
 - [AL-3044] Added ALKConversationListDelegate to get chat thread selection callback.
 	 And updated properties of `ALKChatViewModelProtocol` to public.
+- [Al-3093] Update rich message layout to display message on top of templates.
 
 ### Fixes
 
