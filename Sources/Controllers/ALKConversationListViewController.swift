@@ -29,7 +29,7 @@ open class ALKConversationListViewController: ALKBaseViewController, Localizable
     public var conversationViewModelType = ALKConversationViewModel.self
     public var delegate: ALKConversationListDelegate?
 
-    fileprivate lazy var conversationListTableViewController = ConversationListTableViewController(viewModel: self.viewModel, dbService: self.dbService, configuration: self.configuration, delegate: self)
+    fileprivate lazy var conversationListTableViewController = ALKConversationListTableViewController(viewModel: self.viewModel, dbService: self.dbService, configuration: self.configuration, delegate: self)
     fileprivate var tapToDismiss:UITapGestureRecognizer!
     fileprivate var alMqttConversationService: ALMQTTConversationService!
     fileprivate var dbService: ALMessageDBService!
@@ -415,7 +415,7 @@ extension ALKConversationListViewController: ALMQTTConversationDelegate {
     }
 }
 
-extension ALKConversationListViewController: ConversationListTableViewDelegate {
+extension ALKConversationListViewController: ALKConversationListTableViewDelegate {
 
     func emptyChatCellTapped() {
         self.compose()
