@@ -255,6 +255,15 @@ open class ALKChatBar: UIView, Localizable {
         }
     }
     
+    //customfix
+    func hideOptionsExceptGalleryAndPhoto() {
+        print("ALKCharBar came here")
+        locationButton.removeFromSuperview()
+        chatButton.removeFromSuperview()
+        videoButton.removeFromSuperview()
+    }
+    //end
+    
     func setComingSoonDelegate(delegate: UIView) {
         comingSoonDelegate = delegate
     }
@@ -337,7 +346,10 @@ open class ALKChatBar: UIView, Localizable {
         chatButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
         chatButton.centerYAnchor.constraint(equalTo: bottomGrayView.centerYAnchor, constant: 0).isActive = true
         
-        photoButton.leadingAnchor.constraint(equalTo: chatButton.trailingAnchor, constant: buttonSpacing).isActive = true
+        //customfix
+//        photoButton.leadingAnchor.constraint(equalTo: chatButton.trailingAnchor, constant: buttonSpacing).isActive = true
+        photoButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
+        //end
         photoButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
         photoButton.heightAnchor.constraint(equalToConstant: 25).isActive = true
         photoButton.centerYAnchor.constraint(equalTo: bottomGrayView.centerYAnchor, constant: 0).isActive = true

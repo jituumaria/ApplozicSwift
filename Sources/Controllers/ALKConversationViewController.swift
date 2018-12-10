@@ -62,6 +62,7 @@ open class ALKConversationViewController: ALKBaseViewController, Localizable {
     fileprivate enum ConstraintIdentifier {
         static let contextTitleView = "contextTitleView"
         static let replyMessageViewHeight = "replyMessageViewHeight"
+        static let mediaBackgroudViewHeight = "mediaBackgroudViewHeight"
     }
 
     fileprivate enum Padding {
@@ -386,7 +387,10 @@ open class ALKConversationViewController: ALKBaseViewController, Localizable {
         isChannelLeft()
 
         guard viewModel.isContextBasedChat else { return }
-        prepareContextView()
+        //customfix
+//        prepareContextView()
+        contextTitleView.isHidden = true
+        //end
     }
 
     func isChannelLeft() {
@@ -415,14 +419,13 @@ open class ALKConversationViewController: ALKBaseViewController, Localizable {
     }
 
     private func setupConstraints() {
-
         var allViews = [backgroundView, contextTitleView, tableView, moreBar, chatBar, typingNoticeView, unreadScrollButton, replyMessageView]
         if let templateView = templateView {
             allViews.append(templateView)
         }
         view.addViewsForAutolayout(views: allViews)
 
-        backgroundView.topAnchor.constraint(equalTo: contextTitleView.bottomAnchor).isActive = true
+        backgroundView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         backgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         backgroundView.bottomAnchor.constraint(equalTo: chatBar.topAnchor).isActive = true
@@ -436,8 +439,10 @@ open class ALKConversationViewController: ALKBaseViewController, Localizable {
         templateView?.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 5.0).isActive = true
         templateView?.widthAnchor.constraint(equalTo: self.view.widthAnchor, constant: -10.0).isActive = true
         templateView?.heightAnchor.constraint(equalToConstant: 45).isActive = true
-
-        tableView.topAnchor.constraint(equalTo: contextTitleView.bottomAnchor).isActive = true
+        //customfix
+//        tableView.topAnchor.constraint(equalTo: contextTitleView.bottomAnchor).isActive = true
+        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        //end
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: (templateView != nil) ? templateView!.topAnchor:typingNoticeView.topAnchor).isActive = true
@@ -676,6 +681,9 @@ open class ALKConversationViewController: ALKBaseViewController, Localizable {
                 print("Not available")
             }
         }
+        //customfix
+        chatBar.hideOptionsExceptGalleryAndPhoto()
+        //end
     }
 
     //MARK: public Control Typing notification
