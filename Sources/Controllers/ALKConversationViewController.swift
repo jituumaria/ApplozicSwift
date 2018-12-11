@@ -12,6 +12,18 @@ import AVFoundation
 import Applozic
 import SafariServices
 
+//customfix
+extension UIStackView {
+    func extAddBackground(color: UIColor) -> UIView {
+        let subView = UIView(frame: bounds)
+        subView.backgroundColor = color
+        subView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        insertSubview(subView, at: 0)
+        return subView
+    }
+}
+//end
+
 open class ALKConversationViewController: ALKBaseViewController, Localizable {
 
     var contactService: ALContactService!
@@ -68,7 +80,10 @@ open class ALKConversationViewController: ALKBaseViewController, Localizable {
     fileprivate enum Padding {
 
         enum ContextView {
-            static let height: CGFloat = 100.0
+            //customfix
+//            static let height: CGFloat = 100.0
+            static let height: CGFloat = 30.0
+            //end
         }
         enum ReplyMessageView {
             static let height: CGFloat = 70.0
@@ -110,7 +125,15 @@ open class ALKConversationViewController: ALKBaseViewController, Localizable {
 
     open var contextTitleView: ALKContextTitleView = {
         let contextView = ALKContextTitleView(frame: CGRect.zero)
-        contextView.backgroundColor = UIColor.orange
+        //customfix
+//        contextView.backgroundColor = UIColor.orange
+        let bgView = contextView.extAddBackground(color: .white)
+        bgView.layer.masksToBounds = false
+        bgView.layer.shadowColor = UIColor.gray.cgColor
+        bgView.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)
+        bgView.layer.shadowOpacity = 1.0
+        bgView.layer.shadowRadius = 0.0
+        //end
         return contextView
     }()
 
@@ -387,10 +410,7 @@ open class ALKConversationViewController: ALKBaseViewController, Localizable {
         isChannelLeft()
 
         guard viewModel.isContextBasedChat else { return }
-        //customfix
-//        prepareContextView()
-        contextTitleView.isHidden = true
-        //end
+        prepareContextView()
     }
 
     func isChannelLeft() {
@@ -413,9 +433,12 @@ open class ALKConversationViewController: ALKBaseViewController, Localizable {
     func prepareContextView(){
         guard let topicDetail = viewModel.getContextTitleData() else {return }
         contextTitleView.configureWith(value: topicDetail)
-        contextTitleView.constraint(
-            withIdentifier: ConstraintIdentifier.contextTitleView)?
-            .constant = Padding.ContextView.height
+        //customfix
+//        contextTitleView.constraint(
+//            withIdentifier: ConstraintIdentifier.contextTitleView)?
+//            .constant = Padding.ContextView.height
+        contextTitleView.titleLabel.text = self.title
+        //end
     }
 
     private func setupConstraints() {
@@ -432,21 +455,23 @@ open class ALKConversationViewController: ALKBaseViewController, Localizable {
 
         contextTitleView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         contextTitleView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        contextTitleView.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
-        contextTitleView.heightAnchor.constraintEqualToAnchor(constant: 0, identifier: ConstraintIdentifier.contextTitleView).isActive = true
+        //customfix
+//        contextTitleView.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
+        contextTitleView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        contextTitleView.layoutMargins = UIEdgeInsetsMake(10, 10, 10, 10)
+        contextTitleView.isLayoutMarginsRelativeArrangement = true
+//        contextTitleView.heightAnchor.constraintEqualToAnchor(constant: 0, identifier: ConstraintIdentifier.contextTitleView).isActive = true
+        //end
 
         templateView?.bottomAnchor.constraint(equalTo: typingNoticeView.topAnchor, constant: -5.0).isActive = true
         templateView?.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 5.0).isActive = true
         templateView?.widthAnchor.constraint(equalTo: self.view.widthAnchor, constant: -10.0).isActive = true
         templateView?.heightAnchor.constraint(equalToConstant: 45).isActive = true
-        //customfix
-//        tableView.topAnchor.constraint(equalTo: contextTitleView.bottomAnchor).isActive = true
-        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        //end
+        
+        tableView.topAnchor.constraint(equalTo: contextTitleView.bottomAnchor, constant: 1.0).isActive = true
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: (templateView != nil) ? templateView!.topAnchor:typingNoticeView.topAnchor).isActive = true
-
 
         typingNoticeViewHeighConstaint = typingNoticeView.heightAnchor.constraint(equalToConstant: 0)
         typingNoticeViewHeighConstaint?.isActive = true

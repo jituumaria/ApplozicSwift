@@ -59,7 +59,10 @@ final class ALKChatCell: MGSwipeTableCell {
         label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 1
         label.font = Font.bold(size: 14.0).font()
-        label.textColor = .text(.black00)
+        //customfix
+//        label.textColor = .text(.black00)
+        label.textColor = UIColor(red:0.60, green:0.60, blue:0.60, alpha:1.0)
+        //end
         return label
     }()
 
@@ -317,28 +320,41 @@ final class ALKChatCell: MGSwipeTableCell {
         }
 
         self.voipButton.isEnabled = !viewModel.isGroupChat
+        
+        //customfix
+        avatarImageView.removeFromSuperview()
+        avatarName.removeFromSuperview()
+        //end
     }
 
     private func setupConstraints() {
-
-        contentView.addViewsForAutolayout(views: [avatarImageView, nameLabel, locationLabel,lineView,voipButton,/*favoriteButton,*/avatarName,badgeNumberView, timeLabel, onlineStatusView])
+        //customfix
+//        contentView.addViewsForAutolayout(views: [avatarImageView, nameLabel, locationLabel,lineView,voipButton,/*favoriteButton,*/avatarName,badgeNumberView, timeLabel, onlineStatusView])
+        contentView.addViewsForAutolayout(views: [nameLabel, locationLabel,lineView,voipButton,/*favoriteButton,*/badgeNumberView, timeLabel, onlineStatusView])
+        //end
 
         // setup constraint of imageProfile
-        avatarImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 17.0).isActive = true
-        avatarImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15.0).isActive = true
-        avatarImageView.heightAnchor.constraint(equalToConstant: 45.0).isActive = true
-        avatarImageView.widthAnchor.constraint(equalToConstant: 45.0).isActive = true
+        //customfix
+//        avatarImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 17.0).isActive = true
+//        avatarImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15.0).isActive = true
+//        avatarImageView.heightAnchor.constraint(equalToConstant: 45.0).isActive = true
+//        avatarImageView.widthAnchor.constraint(equalToConstant: 45.0).isActive = true
+        //end
 
         // setup constraint of name
-        nameLabel.topAnchor.constraint(equalTo: avatarImageView.topAnchor, constant: 2).isActive = true
+        //customfix
+//        nameLabel.topAnchor.constraint(equalTo: avatarImageView.topAnchor, constant: 2).isActive = true
+        nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15.0).isActive = true
         nameLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        nameLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 12).isActive = true
+//        nameLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 12).isActive = true
+        nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 17.0).isActive = true
         nameLabel.trailingAnchor.constraint(equalTo: timeLabel.leadingAnchor, constant: -5).isActive = true
+        //end
 
         // setup constraint of mood
         locationLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 2).isActive = true
         locationLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        locationLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 12).isActive = true
+        locationLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 17.0).isActive = true
         locationLabel.trailingAnchor.constraint(equalTo: voipButton.leadingAnchor, constant: -19).isActive = true
 
         // setup constraint of line
@@ -365,11 +381,30 @@ final class ALKChatCell: MGSwipeTableCell {
         // setup constraint of badgeNumber
         badgeNumberView.addViewsForAutolayout(views: [badgeNumberLabel])
 
-
-        badgeNumberView.trailingAnchor.constraint(lessThanOrEqualTo: nameLabel.leadingAnchor, constant: -5)
-        badgeNumberView.topAnchor.constraint(equalTo: avatarImageView.topAnchor, constant: 0).isActive = true
-        badgeNumberView.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: -12).isActive = true
-
+        //customfix
+//        badgeNumberView.trailingAnchor.constraint(lessThanOrEqualTo: nameLabel.leadingAnchor, constant: -5)
+//        badgeNumberView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15.0).isActive = true
+//        badgeNumberView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5).isActive = true
+//
+//        badgeNumberLabel.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
+//        badgeNumberLabel.topAnchor.constraint(equalTo: badgeNumberView.topAnchor, constant: 2.0).isActive = true
+//        badgeNumberLabel.bottomAnchor.constraint(equalTo: badgeNumberView.bottomAnchor, constant: -2.0).isActive = true
+//        badgeNumberLabel.leadingAnchor.constraint(equalTo: badgeNumberView.leadingAnchor, constant: 2.0).isActive = true
+//        badgeNumberLabel.trailingAnchor.constraint(equalTo: badgeNumberView.trailingAnchor, constant: -2.0).isActive = true
+//        badgeNumberLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 11.0).isActive = true
+//        badgeNumberLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 11.0).isActive = true
+        
+        //old
+        timeLabel.heightAnchor.constraint(equalToConstant: 15).isActive = true
+        timeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -19).isActive = true
+        timeLabel.widthAnchor.constraint(equalToConstant: 70).isActive = true
+        timeLabel.topAnchor.constraint(equalTo: nameLabel.topAnchor, constant: 0).isActive  = true
+        //old
+        
+        badgeNumberView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -19).isActive = true
+        badgeNumberView.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 10.0).isActive = true
+//        badgeNumberView.leadingAnchor.constraint(equalTo: timeLabel.leadingAnchor, constant: 5).isActive = true
+        
         badgeNumberLabel.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         badgeNumberLabel.topAnchor.constraint(equalTo: badgeNumberView.topAnchor, constant: 2.0).isActive = true
         badgeNumberLabel.bottomAnchor.constraint(equalTo: badgeNumberView.bottomAnchor, constant: -2.0).isActive = true
@@ -377,20 +412,18 @@ final class ALKChatCell: MGSwipeTableCell {
         badgeNumberLabel.trailingAnchor.constraint(equalTo: badgeNumberView.trailingAnchor, constant: -2.0).isActive = true
         badgeNumberLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 11.0).isActive = true
         badgeNumberLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 11.0).isActive = true
-
-        timeLabel.heightAnchor.constraint(equalToConstant: 15).isActive = true
-        timeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -19).isActive = true
-        timeLabel.widthAnchor.constraint(equalToConstant: 70).isActive = true
-        timeLabel.topAnchor.constraint(equalTo: nameLabel.topAnchor, constant: 0).isActive  = true
+        //end
 
         onlineStatusView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0).isActive = true
         onlineStatusView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0).isActive = true
         onlineStatusView.widthAnchor.constraint(equalToConstant: 6).isActive = true
-
-        avatarName.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 17.0).isActive = true
-        avatarName.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15.0).isActive = true
-        avatarName.heightAnchor.constraint(equalToConstant: 45.0).isActive = true
-        avatarName.widthAnchor.constraint(equalToConstant: 45.0).isActive = true
+        
+        //customfix
+//        avatarName.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 17.0).isActive = true
+//        avatarName.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15.0).isActive = true
+//        avatarName.heightAnchor.constraint(equalToConstant: 45.0).isActive = true
+//        avatarName.widthAnchor.constraint(equalToConstant: 45.0).isActive = true
+        //end
 
         // update frame
         contentView.layoutIfNeeded()
