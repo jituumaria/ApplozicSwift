@@ -27,7 +27,7 @@ open class ALKContextTitleView: UIStackView, ALKContextTitleViewType {
         label.setFont(UIFont.font(.normal(size: 14)))
         //customfix
 //        label.textColor = UIColor.white
-        label.textColor = .black
+        label.textColor = UIColor(hexString: "#555")
         label.numberOfLines = 2
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
         //end

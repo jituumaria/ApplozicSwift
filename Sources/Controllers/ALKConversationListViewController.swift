@@ -402,7 +402,10 @@ extension ALKConversationListViewController: UITableViewDelegate, UITableViewDat
     }
 
     open func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
+        //customfix
+//      return false
+        return false
+        //end
     }
 }
 

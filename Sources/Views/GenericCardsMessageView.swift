@@ -9,6 +9,16 @@ import Foundation
 import Applozic
 import Kingfisher
 
+//customfix
+extension UIImageView {
+    func setImageColor(color: UIColor) {
+        let templateImage = self.image?.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
+        self.image = templateImage
+        self.tintColor = color
+    }
+}
+//end
+
 class GenericCardsMessageView: UIView {
     
     private var widthPadding: CGFloat = CGFloat(ALKMessageStyle.receivedBubble.widthPadding)
@@ -121,7 +131,14 @@ class GenericCardsMessageView: UIView {
         nameLabel.text = viewModel.displayName
         nameLabel.setStyle(ALKMessageStyle.displayName)
         messageView.text = viewModel.message ?? ""
-        messageView.setStyle(ALKMessageStyle.message)
+        //customfix
+//        messageView.setStyle(ALKMessageStyle.message)
+        if viewModel.isMyMessage {
+            messageView.setStyle(ALKMessageStyle.sentMessage)
+        } else {
+            messageView.setStyle(ALKMessageStyle.recievedMessage)
+        }
+        //end
         timeLabel.text = viewModel.time
         timeLabel.setStyle(ALKMessageStyle.time)
     }
@@ -131,10 +148,12 @@ class GenericCardsMessageView: UIView {
         
         if let message = viewModel.message {
             let maxSize = CGSize.init(width: widthNoPadding, height: CGFloat.greatestFiniteMagnitude)
-            
-            let font = ALKMessageStyle.message.font
-            let color = ALKMessageStyle.message.text
-            
+            //customfix
+//            let font = ALKMessageStyle.message.font
+//            let color = ALKMessageStyle.message.text
+            let font = ALKMessageStyle.defaultMessage.font
+            let color = ALKMessageStyle.defaultMessage.text
+            //end
             let style = NSMutableParagraphStyle.init()
             style.lineBreakMode = .byWordWrapping
             style.headIndent = 0

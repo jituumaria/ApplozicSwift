@@ -14,11 +14,28 @@ public enum ALKMessageStyle {
         text: .text(.gray9B)
     )
 
-    public static var message = Style(
+    //customfix
+//    public static var message = Style(
+//        font: UIFont.font(.normal(size: 14)),
+//        text: .text(.black00)
+//    )
+
+    public static var sentMessage = Style(
         font: UIFont.font(.normal(size: 14)),
         text: .text(.black00)
     )
-
+    
+    public static var recievedMessage = Style(
+        font: UIFont.font(.normal(size: 14)),
+        text: .white
+    )
+    
+    public static var defaultMessage = Style(
+        font: UIFont.font(.normal(size: 14)),
+        text: .text(.black00)
+    )
+    //end
+    
     public static var playTime = Style(
         font: UIFont.font(.normal(size: 16)),
         text: .text(.black00)
@@ -53,6 +70,8 @@ public enum ALKMessageStyle {
         }
     }
 
-    public static var sentBubble = Bubble(color: UIColor(netHex: 0xF1F0F0), style: .edge)
-    public static var receivedBubble = Bubble(color: UIColor(netHex: 0xF1F0F0), style: .edge)
+//    public static var sentBubble = Bubble(color: UIColor(netHex: 0xF1F0F0), style: .edge)
+//    public static var receivedBubble = Bubble(color: UIColor(netHex: 0xF1F0F0), style: .edge)
+    public static var sentBubble = Bubble(color: UIColor(hexString: "#fff"), style: .edge)
+    public static var receivedBubble = Bubble(color: UIColor(hexString: "#0181ca"), style: .edge)
 }

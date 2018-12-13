@@ -80,10 +80,7 @@ open class ALKConversationViewController: ALKBaseViewController, Localizable {
     fileprivate enum Padding {
 
         enum ContextView {
-            //customfix
-//            static let height: CGFloat = 100.0
-            static let height: CGFloat = 30.0
-            //end
+            static let height: CGFloat = 100.0
         }
         enum ReplyMessageView {
             static let height: CGFloat = 70.0
@@ -103,7 +100,10 @@ open class ALKConversationViewController: ALKBaseViewController, Localizable {
 
     fileprivate let titleButton : UIButton = {
         let titleButton = UIButton(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
-        titleButton.setTitleColor(UIColor.black, for: .normal)
+        //customfix
+//        titleButton.setTitleColor(UIColor.black, for: .normal)
+        titleButton.setTitleColor(.white, for: .normal)
+        //end
         titleButton.titleLabel?.font  = UIFont.boldSystemFont(ofSize: 17.0)
         return titleButton
     }()
@@ -129,7 +129,7 @@ open class ALKConversationViewController: ALKBaseViewController, Localizable {
 //        contextView.backgroundColor = UIColor.orange
         let bgView = contextView.extAddBackground(color: .white)
         bgView.layer.masksToBounds = false
-        bgView.layer.shadowColor = UIColor.gray.cgColor
+        bgView.layer.shadowColor = UIColor(hexString: "#888").cgColor
         bgView.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)
         bgView.layer.shadowOpacity = 1.0
         bgView.layer.shadowRadius = 0.0
