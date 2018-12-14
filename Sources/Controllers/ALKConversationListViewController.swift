@@ -234,8 +234,11 @@ open class ALKConversationListViewController: ALKBaseViewController, Localizable
         self.automaticallyAdjustsScrollViewInsets = false
         tableView.register(ALKChatCell.self)
 
-        let nib = UINib(nibName: "EmptyChatCell", bundle: Bundle.applozic)
-        tableView.register(nib, forCellReuseIdentifier: "EmptyChatCell")
+        //customfix
+//        let nib = UINib(nibName: "EmptyChatCell", bundle: Bundle.applozic)
+//        tableView.register(nib, forCellReuseIdentifier: "EmptyChatCell")
+        //end
+        
         tableView.estimatedRowHeight = 0
     }
 
@@ -321,7 +324,29 @@ open class ALKConversationListViewController: ALKBaseViewController, Localizable
     }
 }
 
+extension UITableView {
+    
+    func setEmptyMessage(_ message: String) {
+        let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.bounds.size.width, height: self.bounds.size.height))
+        messageLabel.text = message
+        messageLabel.textColor = .black
+        messageLabel.numberOfLines = 0;
+        messageLabel.textAlignment = .center;
+        messageLabel.font = UIFont(name: "TrebuchetMS", size: 15)
+        messageLabel.sizeToFit()
+        
+        self.backgroundView = messageLabel;
+        self.separatorStyle = .none;
+    }
+    
+    func restore() {
+        self.backgroundView = nil
+        self.separatorStyle = .singleLine
+    }
+}
+
 extension ALKConversationListViewController: UITableViewDelegate, UITableViewDataSource {
+    
     open func numberOfSections(in tableView: UITableView) -> Int {
         return viewModel.numberOfSection()
     }
@@ -330,6 +355,13 @@ extension ALKConversationListViewController: UITableViewDelegate, UITableViewDat
         if searchActive {
             return searchFilteredChat.count
         }
+        
+        if viewModel.numberOfRowsInSection(section: section) == 0 {
+            self.tableView.setEmptyMessage("You have no conversations")
+        } else {
+            self.tableView.restore()
+        }
+        
         return viewModel.numberOfRowsInSection(section: section)
     }
 

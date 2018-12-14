@@ -134,8 +134,10 @@ class GenericCardsMessageView: UIView {
         //customfix
 //        messageView.setStyle(ALKMessageStyle.message)
         if viewModel.isMyMessage {
+            bubbleView.setImageColor(color: ALKMessageStyle.sentBubble.color)
             messageView.setStyle(ALKMessageStyle.sentMessage)
         } else {
+            bubbleView.setImageColor(color: ALKMessageStyle.receivedBubble.color)
             messageView.setStyle(ALKMessageStyle.recievedMessage)
         }
         //end

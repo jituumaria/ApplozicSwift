@@ -285,12 +285,14 @@ final class ALKChatCell: MGSwipeTableCell {
             }
             return true
         }
-
-        self.rightButtons = [muteButton]
-        self.rightSwipeSettings.transition = .static
-
-        self.leftButtons = [deleteButton]
-        self.leftSwipeSettings.transition = .static
+        
+        //customfix
+//        self.rightButtons = [muteButton]
+//        self.rightSwipeSettings.transition = .static
+//
+//        self.leftButtons = [deleteButton]
+//        self.leftSwipeSettings.transition = .static
+        //end
 
         // get unread count of message and set badgenumber
         let unreadMsgCount = viewModel.totalNumberOfUnreadMessages

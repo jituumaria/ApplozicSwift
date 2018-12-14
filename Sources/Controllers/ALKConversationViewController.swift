@@ -510,7 +510,9 @@ open class ALKConversationViewController: ALKBaseViewController, Localizable {
     private func setupNavigation() {
 
         titleButton.setTitle(self.title, for: .normal)
-        titleButton.addTarget(self, action: #selector(showParticipantListChat), for: .touchUpInside)
+        //customfix
+//        titleButton.addTarget(self, action: #selector(showParticipantListChat), for: .touchUpInside)
+        //end
         titleButton.isEnabled = isGroupDetailActionEnabled
         self.navigationItem.titleView = titleButton
     }

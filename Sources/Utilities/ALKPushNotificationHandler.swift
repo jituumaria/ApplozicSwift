@@ -87,14 +87,17 @@ public class ALKPushNotificationHandler {
         NSLog("Called via notification and user id is: ", userId ?? "Not Present")
 
         let messagesVC = ALKConversationListViewController(configuration: configuration)
-        messagesVC.contactId = userId
-        messagesVC.channelKey = groupId
-        let pushAssistant = ALPushAssist()
-        let topVC =  pushAssistant.topViewController
-        let nav = ALKBaseNavigationViewController(rootViewController: messagesVC)
-        navVC?.modalTransitionStyle = .crossDissolve
-        topVC?.present(nav, animated: true, completion: nil)
-
+        //customfix
+//        messagesVC.contactId = userId
+//        messagesVC.channelKey = groupId
+//        let pushAssistant = ALPushAssist()
+//        let topVC =  pushAssistant.topViewController
+//        let nav = ALKBaseNavigationViewController(rootViewController: messagesVC)
+//        navVC?.modalTransitionStyle = .crossDissolve
+//        topVC?.present(nav, animated: true, completion: nil)
+        messagesVC.launchChat(contactId: contactId, groupId: groupId)
+        //end
+        
     }
 
     func notificationTapped(userId: String?, groupId: NSNumber?) {

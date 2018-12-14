@@ -561,7 +561,6 @@ extension ALKConversationViewController: UICollectionViewDataSource,UICollection
                 template.cards.count > indexPath.row else {
                     return UICollectionViewCell()
             }
-
             let cell: ALKGenericCardCell = collectionView.dequeueReusableCell(forIndexPath: indexPath)
             let card = template.cards[indexPath.row]
             cell.update(card: card)
