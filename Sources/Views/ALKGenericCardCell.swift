@@ -153,12 +153,17 @@ open class ALKGenericCardCell: UICollectionViewCell {
         }
         enum mainStackView {
             static var bottom: CGFloat = -20.0
-            static var left: CGFloat = 0
+            //customfix
+//            static var left: CGFloat = 0
+            static var left: CGFloat = 40
+            //end
             static var right: CGFloat = 0
         }
     }
-
-    open var descriptionLabelHeight: CGFloat = 80.0
+    //customfix
+//    open var descriptionLabelHeight: CGFloat = 80.0
+    open var descriptionLabelHeight: CGFloat = 40.0
+    //end
     open var titleLabelStackViewHeight: CGFloat = 30.0
     open var subtitleLabelHeight: CGFloat = 20.0
 
@@ -182,7 +187,9 @@ open class ALKGenericCardCell: UICollectionViewCell {
 
     open class func rowHeightFor(card: ALKGenericCard) -> CGFloat {
         let buttonHeight = 35
-        let baseHeight:CGFloat = 200
+        //customfix
+        let baseHeight:CGFloat = 150
+        //end
         let padding:CGFloat = 10
         let coverImageHeight = (card.imageUrl != nil) ? Padding.CoverImageView.height:0
         let totalButtonHeight:CGFloat = (card.buttons != nil) ? CGFloat(buttonHeight*(card.buttons?.count)!):0
@@ -234,7 +241,10 @@ open class ALKGenericCardCell: UICollectionViewCell {
         actionButtons = (1...3).map {
             let button = UIButton()
             button.setTitleColor(UIColor(netHex: 0x5c5aa7), for: .normal)
-            button.setFont(font: UIFont.font(.bold(size: 16.0)))
+            //customfix
+//            button.setFont(font: UIFont.font(.bold(size: 16.0)))
+            button.setFont(font: UIFont.font(.bold(size: 13.0)))
+            //end
             button.setTitle("Button", for: .normal)
             button.addTarget(self, action: #selector(buttonSelected(_:)), for: .touchUpInside)
             button.layer.borderWidth = 1.0

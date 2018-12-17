@@ -108,7 +108,10 @@ class ALKMyGenericCardCell: ALKChatBaseCell<ALKMessageViewModel> {
         
         collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10).isActive = true
         collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 85).isActive = true
-        collectionView.topAnchor.constraint(equalTo: bubbleView.bottomAnchor, constant: 10).isActive = true
+        //customfix
+//        collectionView.topAnchor.constraint(equalTo: bubbleView.bottomAnchor, constant: 10).isActive = true
+        collectionView.topAnchor.constraint(equalTo: bubbleView.bottomAnchor, constant: -15).isActive = true
+        //end
         collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5).isActive = true
     }
     

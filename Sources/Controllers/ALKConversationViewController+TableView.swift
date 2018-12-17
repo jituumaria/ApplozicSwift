@@ -10,6 +10,8 @@ import Foundation
 import UIKit
 import AVFoundation
 import Applozic
+import SafariServices
+import SwiftSoup
 
 extension ALKConversationViewController: UITableViewDelegate, UITableViewDataSource {
 
@@ -20,7 +22,7 @@ extension ALKConversationViewController: UITableViewDelegate, UITableViewDataSou
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.numberOfRows(section: section)
     }
-
+    
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard var message = viewModel.messageForRow(indexPath: indexPath) else {
             return UITableViewCell()
@@ -82,6 +84,9 @@ extension ALKConversationViewController: UITableViewDelegate, UITableViewDataSou
                 }
                 cell.menuAction = {[weak self] action in
                     self?.menuItemSelected(action: action, message: message) }
+                //customfix
+                cell.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(htmlClickAction(_:))))
+                //end
                 return cell
             }
         case .photo:
@@ -314,6 +319,32 @@ extension ALKConversationViewController: UITableViewDelegate, UITableViewDataSou
         }
     }
 
+    @objc func htmlClickAction(_ sender: UITapGestureRecognizer) {
+        if let view = sender.view as? ALKFriendMessageCell {
+            if let viewModel = view.viewModel {
+                if let message = view.viewModel?.message {
+                    if viewModel.messageType == .html {
+                        do {
+                            let doc: Document = try SwiftSoup.parse(message)
+                            if let link: String = try doc.select("a").first()?.attr("href") {
+                                let url = URL(string: link)
+                                let vc = SFSafariViewController(url: url!)
+                                present(vc, animated: true, completion: nil)
+                            }
+                        } catch let error {
+                            print("error parsing applozic html message: \(error)")
+                        }
+                    }
+                } else {
+                    print("somethingwentwrong")
+                }
+            } else {
+                print("some thing went wrong")
+            }
+        } else {
+            print("some thing went wrong")
+        }
+    }
 
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return viewModel.heightForRow(indexPath: indexPath, cellFrame: self.view.frame)
@@ -554,8 +585,7 @@ extension ALKConversationViewController: UICollectionViewDataSource,UICollection
 
             return cell
 
-        }else {
-
+        } else {
             guard let message = viewModel.messageForRow(indexPath: IndexPath(row: 0, section: collectionView.tag)),
                 let template = viewModel.genericTemplateFor(message: message) as? ALKGenericCardTemplate,
                 template.cards.count > indexPath.row else {
@@ -564,6 +594,11 @@ extension ALKConversationViewController: UICollectionViewDataSource,UICollection
             let cell: ALKGenericCardCell = collectionView.dequeueReusableCell(forIndexPath: indexPath)
             let card = template.cards[indexPath.row]
             cell.update(card: card)
+            //customfix
+            cell.descriptionLabel.setFont(cell.descriptionLabel.font.withSize(12))
+            cell.titleLabel.setFont(cell.titleLabel.font.withSize(14))
+            cell.subtitleLabel.setFont(cell.subtitleLabel.font.withSize(11))
+            //end
             cell.buttonSelected = {[weak self] tag, title in
                 print("\(title, tag) button selected in generic card")
                 guard let strongSelf = self else {return}

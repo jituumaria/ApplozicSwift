@@ -44,6 +44,7 @@ open class ALKConversationListViewController: ALKBaseViewController, Localizable
         tv.backgroundColor = UIColor.white
         tv.keyboardDismissMode = .onDrag
         tv.accessibilityIdentifier = "OuterChatScreenTableView"
+        tv.tableFooterView = UIView(frame: .zero)
         return tv
     }()
 
@@ -223,7 +224,6 @@ open class ALKConversationListViewController: ALKBaseViewController, Localizable
         view.addViewsForAutolayout(views: [tableView])
 
         tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
@@ -237,9 +237,8 @@ open class ALKConversationListViewController: ALKBaseViewController, Localizable
         //customfix
 //        let nib = UINib(nibName: "EmptyChatCell", bundle: Bundle.applozic)
 //        tableView.register(nib, forCellReuseIdentifier: "EmptyChatCell")
+//        tableView.estimatedRowHeight = 0
         //end
-        
-        tableView.estimatedRowHeight = 0
     }
 
     func launchChat(contactId: String?, groupId: NSNumber?, conversationId: NSNumber? = nil) {
@@ -356,11 +355,13 @@ extension ALKConversationListViewController: UITableViewDelegate, UITableViewDat
             return searchFilteredChat.count
         }
         
+        //customfix
         if viewModel.numberOfRowsInSection(section: section) == 0 {
             self.tableView.setEmptyMessage("You have no conversations")
         } else {
             self.tableView.restore()
         }
+        //end
         
         return viewModel.numberOfRowsInSection(section: section)
     }
