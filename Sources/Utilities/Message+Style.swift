@@ -70,8 +70,10 @@ public enum ALKMessageStyle {
         }
     }
 
+    //customfix
 //    public static var sentBubble = Bubble(color: UIColor(netHex: 0xF1F0F0), style: .edge)
 //    public static var receivedBubble = Bubble(color: UIColor(netHex: 0xF1F0F0), style: .edge)
     public static var sentBubble = Bubble(color: UIColor(hexString: "#fff"), style: .edge)
     public static var receivedBubble = Bubble(color: UIColor(hexString: "#0181ca"), style: .edge)
+    //end
 }

@@ -72,11 +72,11 @@ open class ALKContextTitleView: UIStackView, ALKContextTitleViewType {
         super.init(frame: frame)
         setupConstraints()
     }
-
-    required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    
+    required public init(coder: NSCoder) {
+        super.init(coder: coder)
     }
-
+    
     //MARK: - Public Methods
 
     public func configureWith(value data: ALKContextTitleDataType) {

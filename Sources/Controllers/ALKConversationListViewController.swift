@@ -258,7 +258,9 @@ open class ALKConversationListViewController: ALKBaseViewController, Localizable
         tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         self.automaticallyAdjustsScrollViewInsets = false
         tableView.register(ALKChatCell.self)
-        tableView.estimatedRowHeight = 0
+        //customfix
+//        tableView.estimatedRowHeight = 0
+        //end
     }
 
     func launchChat(contactId: String?, groupId: NSNumber?, conversationId: NSNumber? = nil) {
@@ -336,7 +338,6 @@ open class ALKConversationListViewController: ALKBaseViewController, Localizable
         }
     }
 
-
     fileprivate func push(conversationVC: ALKConversationViewController, with viewModel: ALKConversationViewModel, title: String) {
         if let topVC = navigationController?.topViewController as? ALKConversationViewController {
             // Update the details and refresh
@@ -351,6 +352,27 @@ open class ALKConversationListViewController: ALKBaseViewController, Localizable
             conversationVC.viewWillLoadFromTappingOnNotification()
             self.navigationController?.pushViewController(conversationVC, animated: false)
         }
+    }
+}
+
+extension UITableView {
+
+    func setEmptyMessage(_ message: String) {
+        let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.bounds.size.width, height: self.bounds.size.height))
+        messageLabel.text = message
+        messageLabel.textColor = .black
+        messageLabel.numberOfLines = 0;
+        messageLabel.textAlignment = .center;
+        messageLabel.font = UIFont(name: "TrebuchetMS", size: 15)
+        messageLabel.sizeToFit()
+
+        self.backgroundView = messageLabel;
+        self.separatorStyle = .none;
+        }
+
+    func restore() {
+        self.backgroundView = nil
+        self.separatorStyle = .singleLine
     }
 }
 

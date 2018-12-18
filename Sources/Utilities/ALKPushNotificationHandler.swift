@@ -108,7 +108,6 @@ public class ALKPushNotificationHandler: Localizable {
         let nav = ALKBaseNavigationViewController(rootViewController: messagesVC)
         navVC?.modalTransitionStyle = .crossDissolve
         topVC?.present(nav, animated: true, completion: nil)
-
     }
 
     func notificationTapped(userId: String?, groupId: NSNumber?) {
