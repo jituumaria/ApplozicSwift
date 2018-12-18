@@ -311,6 +311,7 @@ open class ALKConversationViewController: ALKBaseViewController, Localizable {
 
     override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+
         if UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft {
             tableView.semanticContentAttribute = UISemanticContentAttribute.forceRightToLeft
         }
@@ -444,7 +445,7 @@ open class ALKConversationViewController: ALKBaseViewController, Localizable {
         contextTitleView.titleLabel.text = self.title
         //end
     }
-    
+
     private func toggleVisibilityOfContextTitleView(_ show: Bool) {
         let height: CGFloat = show ? Padding.ContextView.height : 0
         contextTitleView.constraint(
