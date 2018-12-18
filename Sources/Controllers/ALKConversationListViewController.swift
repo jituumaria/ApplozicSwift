@@ -11,18 +11,30 @@ import UIKit
 import ContactsUI
 import Applozic
 
+/// The delegate of an `ALKConversationListViewController` object.
+/// Provides different methods to manage chat thread selections.
+public protocol ALKConversationListDelegate {
+    func conversation(
+        _ message: ALKChatViewModelProtocol,
+        willSelectItemAt index: Int,
+        viewController: ALKConversationListViewController
+    )
+}
+
 open class ALKConversationListViewController: ALKBaseViewController, Localizable {
+
+    public var conversationViewController: ALKConversationViewController?
+    public var dbServiceType = ALMessageDBService.self
+    public var viewModelType = ALKConversationListViewModel.self
+    public var conversationViewModelType = ALKConversationViewModel.self
+    public var delegate: ALKConversationListDelegate?
 
     var viewModel: ALKConversationListViewModel!
 
     // To check if coming from push notification
     var contactId: String?
     var channelKey: NSNumber?
-
-    public var conversationViewControllerType = ALKConversationViewController.self
-    public var dbServiceType = ALMessageDBService.self
-    public var viewModelType = ALKConversationListViewModel.self
-    public var conversationViewModelType = ALKConversationViewModel.self
+    var conversationId: NSNumber?
 
     fileprivate var tapToDismiss:UITapGestureRecognizer!
     fileprivate let searchController = UISearchController(searchResultsController: nil)
@@ -32,8 +44,6 @@ open class ALKConversationListViewController: ALKBaseViewController, Localizable
     fileprivate var dbService: ALMessageDBService!
     fileprivate let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
 
-    fileprivate var conversationViewController: ALKConversationViewController?
-    
     fileprivate var localizedStringFileName: String!
 
     let tableView : UITableView = {
@@ -44,7 +54,9 @@ open class ALKConversationListViewController: ALKBaseViewController, Localizable
         tv.backgroundColor = UIColor.white
         tv.keyboardDismissMode = .onDrag
         tv.accessibilityIdentifier = "OuterChatScreenTableView"
+        //customfix
         tv.tableFooterView = UIView(frame: .zero)
+        //end
         return tv
     }()
 
@@ -76,7 +88,7 @@ open class ALKConversationListViewController: ALKBaseViewController, Localizable
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "newMessageNotification"), object: nil, queue: nil, using: {[weak self] notification in
             guard let weakSelf = self, let viewModel = weakSelf.viewModel else { return }
             let msgArray = notification.object as? [ALMessage]
-            print("new notification received: ", msgArray?.first?.message)
+            print("new notification received: ", msgArray?.first?.message ?? "")
             guard let list = notification.object as? [Any], !list.isEmpty else { return }
             viewModel.addMessages(messages: list)
 
@@ -84,17 +96,24 @@ open class ALKConversationListViewController: ALKBaseViewController, Localizable
 
 
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "pushNotification"), object: nil, queue: nil, using: {[weak self] notification in
-            print("push notification received: ", notification.object)
+            print("push notification received: ", notification.object ?? "")
             guard let weakSelf = self, let object = notification.object as? String else { return }
             let components = object.components(separatedBy: ":")
             var groupId: NSNumber? = nil
             var contactId: String? = nil
-            if components.count > 1, let secondComponent = Int(components[1]) {
-                let id = NSNumber(integerLiteral: secondComponent)
-                groupId = id
+            var conversationId: NSNumber? = nil
+
+            if components.count > 2 {
+                let groupComponent = Int(components[1])
+                groupId = NSNumber(integerLiteral: groupComponent!)
+            } else if components.count == 2 {
+                let conversationComponent = Int(components[1])
+                conversationId = NSNumber(integerLiteral: conversationComponent!)
+                contactId = components[0]
             } else {
                 contactId = object
             }
+
             let message = ALMessage()
             message.contactIds = contactId
             message.groupId = groupId
@@ -113,8 +132,8 @@ open class ALKConversationListViewController: ALKBaseViewController, Localizable
             } else if updateUI == Int(APP_STATE_INACTIVE.rawValue) {
                 // Coming from background
 
-                guard contactId != nil || groupId != nil else { return }
-               weakSelf.launchChat(contactId: contactId, groupId: groupId)
+                guard contactId != nil || groupId != nil || conversationId != nil else { return }
+               weakSelf.launchChat(contactId: contactId, groupId: groupId, conversationId: conversationId)
             }
         })
 
@@ -164,6 +183,7 @@ open class ALKConversationListViewController: ALKBaseViewController, Localizable
         dbService.delegate = self
         viewModel = viewModelType.init()
         viewModel.delegate = self
+        viewModel.localizationFileName = configuration.localizedStringFileName
         activityIndicator.center = CGPoint(x: view.bounds.size.width/2, y: view.bounds.size.height/2)
         activityIndicator.color = UIColor.gray
         view.addSubview(activityIndicator)
@@ -183,11 +203,12 @@ open class ALKConversationListViewController: ALKBaseViewController, Localizable
 
     override open func viewDidAppear(_ animated: Bool) {
         print("contact id: ", contactId as Any)
-        if contactId != nil || channelKey != nil {
+        if contactId != nil || channelKey != nil || conversationId != nil {
             print("contact id present")
-            launchChat(contactId: contactId, groupId: channelKey)
+            launchChat(contactId: contactId, groupId: channelKey, conversationId: conversationId)
             self.contactId = nil
             self.channelKey = nil
+            self.conversationId = nil
         }
     }
 
@@ -210,7 +231,10 @@ open class ALKConversationListViewController: ALKBaseViewController, Localizable
 
         let back = localizedString(forKey: "Back", withDefaultValue: SystemMessage.ChatList.leftBarBackButton, fileName: localizedStringFileName)
         let leftBarButtonItem = UIBarButtonItem(title: back, style: .plain, target: self, action: #selector(customBackAction))
-        navigationItem.leftBarButtonItem = leftBarButtonItem
+
+        if !configuration.hideBackButtonInConversationList {
+            navigationItem.leftBarButtonItem = leftBarButtonItem
+        }
 
         #if DEVELOPMENT
             let indicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
@@ -224,6 +248,7 @@ open class ALKConversationListViewController: ALKBaseViewController, Localizable
         view.addViewsForAutolayout(views: [tableView])
 
         tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
@@ -233,38 +258,27 @@ open class ALKConversationListViewController: ALKBaseViewController, Localizable
         tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         self.automaticallyAdjustsScrollViewInsets = false
         tableView.register(ALKChatCell.self)
-
-        //customfix
-//        let nib = UINib(nibName: "EmptyChatCell", bundle: Bundle.applozic)
-//        tableView.register(nib, forCellReuseIdentifier: "EmptyChatCell")
-//        tableView.estimatedRowHeight = 0
-        //end
+        tableView.estimatedRowHeight = 0
     }
 
     func launchChat(contactId: String?, groupId: NSNumber?, conversationId: NSNumber? = nil) {
-        let alChannelService = ALChannelService()
-        let alContactDbService = ALContactDBService()
-        var title = ""
-        if let key = groupId, let alChannel = alChannelService.getChannelByKey(key), let name = alChannel.name {
-            title = name
-        }
-        else if let key = contactId,let alContact = alContactDbService.loadContact(byKey: "userId", value: key), let name = alContact.getDisplayName() {
-            title = name
-        }
+        let title = viewModel.titleFor(contactId: contactId, channelId: groupId)
+        let conversationViewModel = viewModel.conversationViewModelOf(type: conversationViewModelType, contactId: contactId, channelId: groupId, conversationId: conversationId)
 
-        let noName = localizedString(forKey: "NoNameMessage", withDefaultValue: SystemMessage.NoData.NoName, fileName: localizedStringFileName)
-        title = title.isEmpty ? noName : title
-        let convViewModel = conversationViewModelType.init(contactId: contactId, channelKey: groupId, localizedStringFileName : configuration.localizedStringFileName)
-        let convService = ALConversationService()
-        if let convId = conversationId, let convProxy = convService.getConversationByKey(convId) {
-            convViewModel.conversationProxy = convProxy
+        let viewController: ALKConversationViewController!
+        if conversationViewController == nil {
+            viewController = ALKConversationViewController(configuration: configuration)
+            viewController.title = title
+            viewController.viewModel = conversationViewModel
+            conversationViewController = viewController
+        } else {
+            viewController = conversationViewController
+            viewController.title = title
+            viewController.viewModel.contactId = conversationViewModel.contactId
+            viewController.viewModel.channelKey = conversationViewModel.channelKey
+            viewController.viewModel.conversationProxy = conversationViewModel.conversationProxy
         }
-        let viewController = conversationViewControllerType.init(configuration: configuration)
-        viewController.title = title
-        viewController.viewModel = convViewModel
-        viewController.viewWillLoadFromTappingOnNotification()
-        conversationViewController = viewController
-        self.navigationController?.pushViewController(viewController, animated: false)
+        push(conversationVC: viewController, with: conversationViewModel, title: title)
     }
 
     @objc func compose() {
@@ -321,31 +335,26 @@ open class ALKConversationListViewController: ALKBaseViewController, Localizable
             }
         }
     }
-}
 
-extension UITableView {
-    
-    func setEmptyMessage(_ message: String) {
-        let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.bounds.size.width, height: self.bounds.size.height))
-        messageLabel.text = message
-        messageLabel.textColor = .black
-        messageLabel.numberOfLines = 0;
-        messageLabel.textAlignment = .center;
-        messageLabel.font = UIFont(name: "TrebuchetMS", size: 15)
-        messageLabel.sizeToFit()
-        
-        self.backgroundView = messageLabel;
-        self.separatorStyle = .none;
-    }
-    
-    func restore() {
-        self.backgroundView = nil
-        self.separatorStyle = .singleLine
+
+    fileprivate func push(conversationVC: ALKConversationViewController, with viewModel: ALKConversationViewModel, title: String) {
+        if let topVC = navigationController?.topViewController as? ALKConversationViewController {
+            // Update the details and refresh
+            topVC.title = title
+            topVC.viewModel.contactId = viewModel.contactId
+            topVC.viewModel.channelKey = viewModel.channelKey
+            topVC.viewModel.conversationProxy = viewModel.conversationProxy
+            topVC.viewWillLoadFromTappingOnNotification()
+            topVC.refreshViewController()
+        } else {
+            // push conversation VC
+            conversationVC.viewWillLoadFromTappingOnNotification()
+            self.navigationController?.pushViewController(conversationVC, animated: false)
+        }
     }
 }
 
 extension ALKConversationListViewController: UITableViewDelegate, UITableViewDataSource {
-    
     open func numberOfSections(in tableView: UITableView) -> Int {
         return viewModel.numberOfSection()
     }
@@ -383,12 +392,13 @@ extension ALKConversationListViewController: UITableViewDelegate, UITableViewDat
 
         if searchActive {
             guard let chat = searchFilteredChat[indexPath.row] as? ALMessage else {return}
-            let convViewModel = conversationViewModelType.init(contactId: chat.contactId, channelKey: chat.channelKey, localizedStringFileName: configuration.localizedStringFileName)
-            let convService = ALConversationService()
-            if let convId = chat.conversationId, let convProxy = convService.getConversationByKey(convId) {
-                convViewModel.conversationProxy = convProxy
-            }
-            let viewController = conversationViewControllerType.init(configuration: configuration)
+            delegate?.conversation(
+                chat,
+                willSelectItemAt: indexPath.row,
+                viewController: self
+            )
+            let convViewModel = viewModel.conversationViewModelOf(type: conversationViewModelType, contactId: chat.contactId, channelId: chat.channelKey, conversationId: chat.conversationId)
+            let viewController = conversationViewController ?? ALKConversationViewController(configuration: configuration)
             let chatName = chat.name.count > 0 ? chat.name : localizedString(forKey: "NoNameMessage", withDefaultValue: SystemMessage.NoData.NoName, fileName: localizedStringFileName)
             viewController.title = chat.isGroupChat ? chat.groupName:chatName
             viewController.viewModel = convViewModel
@@ -396,12 +406,14 @@ extension ALKConversationListViewController: UITableViewDelegate, UITableViewDat
             self.navigationController?.pushViewController(viewController, animated: false)
         } else {
             guard let chat = viewModel.chatForRow(indexPath: indexPath) else { return }
-            let convViewModel = conversationViewModelType.init(contactId: chat.contactId, channelKey: chat.channelKey, localizedStringFileName: configuration.localizedStringFileName)
-            let convService = ALConversationService()
-            if let convId = chat.conversationId, let convProxy = convService.getConversationByKey(convId) {
-                convViewModel.conversationProxy = convProxy
-            }
-            let viewController = conversationViewControllerType.init(configuration: configuration)
+
+            delegate?.conversation(
+                chat,
+                willSelectItemAt: indexPath.row,
+                viewController: self
+            )
+            let convViewModel = viewModel.conversationViewModelOf(type: conversationViewModelType, contactId: chat.contactId, channelId: chat.channelKey, conversationId: chat.conversationId)
+            let viewController = conversationViewController ?? ALKConversationViewController(configuration: configuration)
             viewController.title = chat.isGroupChat ? chat.groupName:chat.name
             viewController.viewModel = convViewModel
             conversationViewController = viewController
@@ -419,15 +431,25 @@ extension ALKConversationListViewController: UITableViewDelegate, UITableViewDat
 
     open func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
 
-        let view = tableView.dequeueReusableCell(withIdentifier: "EmptyChatCell")?.contentView
-        if let tap = view?.gestureRecognizers?.first {
-            view?.removeGestureRecognizer(tap)
-        }
-        let tap = UITapGestureRecognizer.init(target: self, action: #selector(compose))
-        tap.numberOfTapsRequired = 1
+        let emptyCellView = ALKEmptyView.instanceFromNib()
 
-        view?.addGestureRecognizer(tap)
-        return view
+        let noConversationLabelText = localizedString(forKey: "NoConversationsLabelText", withDefaultValue: SystemMessage.ChatList.NoConversationsLabelText, fileName: localizedStringFileName)
+        emptyCellView.conversationLabel.text = noConversationLabelText
+        emptyCellView.startNewConversationButtonIcon.isHidden = configuration.hideEmptyStateStartNewButtonInConversationList
+
+        if !configuration.hideEmptyStateStartNewButtonInConversationList{
+            if let tap = emptyCellView.gestureRecognizers?.first {
+                emptyCellView.removeGestureRecognizer(tap)
+            }
+
+            let tap = UITapGestureRecognizer.init(target: self, action: #selector(compose))
+            tap.numberOfTapsRequired = 1
+
+            emptyCellView.addGestureRecognizer(tap)
+        }
+
+
+        return emptyCellView
     }
 
     open func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
@@ -435,10 +457,7 @@ extension ALKConversationListViewController: UITableViewDelegate, UITableViewDat
     }
 
     open func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        //customfix
-//      return false
-        return false
-        //end
+        return true
     }
 }
 
@@ -517,9 +536,9 @@ extension ALKConversationListViewController: ALMQTTConversationDelegate {
         }
         return false
     }
-    
+
     func isMessageSentByLoggedInUser(alMessage: ALMessage) -> Bool {
-        if ALUserDefaultsHandler.getUserId() == alMessage.contactId {
+        if alMessage.isSentMessage() {
             return true
         }
         return false
@@ -678,7 +697,7 @@ extension ALKConversationListViewController: ALKChatCellDelegate {
 
     private func alertMessageAndButtonTitleToUnmute(conversation: ALMessage) -> (String?, String?) {
         let unmuteButton = localizedString(forKey: "UnmuteButton", withDefaultValue: SystemMessage.Mute.UnmuteButton, fileName: localizedStringFileName)
-        
+
         if conversation.isGroupChat, let channel = ALChannelService().getChannelByKey(conversation.groupId) {
             let unmuteChannelFormat = localizedString(forKey: "UnmuteChannel", withDefaultValue: SystemMessage.Mute.UnmuteChannel, fileName: localizedStringFileName)
             let unmuteChannelMessage = String(format: unmuteChannelFormat, channel.name)

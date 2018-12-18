@@ -108,6 +108,19 @@ open class ALKConversationViewModel: NSObject, Localizable {
         }
     }
 
+    public func addToWrapper(message: ALMessage) {
+
+        self.alMessageWrapper.addALMessage(toMessageArray: message)
+        self.alMessages.append(message)
+        self.messageModels.append(message.messageModel)
+    }
+
+    func clearViewModel() {
+        self.messageModels.removeAll()
+        self.alMessages.removeAll()
+        self.richMessages.removeAll()
+    }
+
     open func groupProfileImgUrl() -> String {
         guard let message = alMessages.last, let imageUrl = message.avatarGroupImageUrl else {
             return ""
@@ -369,7 +382,7 @@ open class ALKConversationViewModel: NSObject, Localizable {
         }
         var sortedArray = filteredArray
         if filteredArray.count > 1 {
-            sortedArray = filteredArray.sorted { Int($0.createdAtTime) < Int($1.createdAtTime) }
+            sortedArray = filteredArray.sorted { Int(truncating: $0.createdAtTime) < Int(truncating: $1.createdAtTime) }
         }
         guard !sortedArray.isEmpty else { return }
 

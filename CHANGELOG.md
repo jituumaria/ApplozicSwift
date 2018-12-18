@@ -9,11 +9,18 @@ The changelog for [ApplozicSwift](https://github.com/AppLozic/ApplozicSwift). Al
 - [AL-2856] Added a header view in chat bar to inject custom views from outside.
 - [AL-3044] Added ALKConversationListDelegate to get chat thread selection callback.
 	 And updated properties of `ALKChatViewModelProtocol` to public.
+- [AL-2923] Added configure for hide start new in empty conversation
+- [AL-2923] Added configure for hide back button in conversation list
+- [AL-2923] Added configure for changing  color in navigation title
 - [Al-3093] Update rich message layout to display message on top of templates.
+- [AL-3131] Update notification to support context-based-chat.
 
 ### Fixes
 
 - [AL-3056] Fix an issue where earlier conversation won't load when scrolled to top.
+- [AL-2923] Fix the crash for media cells for localization file name.
+- [Al-3123] Fix an issue where notification will come for the message sent by the logged in user from different device.
+- [AL-3117] Refresh conversationView when it is opened.
 
 1.2.0
 ---

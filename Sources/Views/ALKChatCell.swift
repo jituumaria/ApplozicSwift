@@ -12,7 +12,7 @@ import Kingfisher
 import MGSwipeTableCell
 import Applozic
 
-protocol ALKChatViewModelProtocol {
+public protocol ALKChatViewModelProtocol {
     var avatar: URL? { get }
     var avatarImage: UIImage? { get }
     var avatarGroupImageUrl: String? { get }
@@ -356,7 +356,7 @@ final class ALKChatCell: MGSwipeTableCell {
         // setup constraint of mood
         locationLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 2).isActive = true
         locationLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        locationLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 17.0).isActive = true
+        locationLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 12).isActive = true
         locationLabel.trailingAnchor.constraint(equalTo: voipButton.leadingAnchor, constant: -19).isActive = true
 
         // setup constraint of line
@@ -463,7 +463,7 @@ final class ALKChatCell: MGSwipeTableCell {
         var firstTwoCharStr = ""
 
         for string in stringInputArr {
-            guard let firstChar = string.characters.first else { continue }
+            guard let firstChar = string.first else { continue }
             firstTwoCharStr = firstTwoCharStr + String(firstChar)
         }
         return firstTwoCharStr

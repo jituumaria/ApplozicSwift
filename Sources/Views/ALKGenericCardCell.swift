@@ -57,13 +57,13 @@ open class ALKGenericCardCollectionView: ALKIndexedCollectionView {
 
 open class ALKGenericCardCell: UICollectionViewCell {
 
-    open let coverImageView: UIImageView = {
+    open var coverImageView: UIImageView = {
         let imageView = UIImageView(frame: CGRect.zero)
         imageView.image = UIImage(named: "placeholder", in: Bundle.applozic, compatibleWith: nil)
         return imageView
     }()
     
-    var overlayText: InsetLabel = {
+    open var overlayText: InsetLabel = {
         let label = InsetLabel(insets: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
         label.backgroundColor = UIColor.white
         label.text = ""
@@ -75,7 +75,7 @@ open class ALKGenericCardCell: UICollectionViewCell {
         return label
     }()
     
-    var ratingLabel: UILabel = {
+    open var ratingLabel: UILabel = {
         let label = UILabel()
         label.text = ""
         label.textColor = UIColor.black
@@ -84,7 +84,7 @@ open class ALKGenericCardCell: UICollectionViewCell {
         return label
     }()
 
-    open let titleLabel: UILabel = {
+    open var titleLabel: UILabel = {
         let label = UILabel()
         label.text = ""
         label.numberOfLines = 1
@@ -93,7 +93,7 @@ open class ALKGenericCardCell: UICollectionViewCell {
         return label
     }()
 
-    open let subtitleLabel: UILabel = {
+    open var subtitleLabel: UILabel = {
         let label = UILabel()
         label.text = ""
         label.numberOfLines = 1
@@ -102,7 +102,7 @@ open class ALKGenericCardCell: UICollectionViewCell {
         return label
     }()
 
-    open let descriptionLabel: VerticalAlignLabel = {
+    open var descriptionLabel: VerticalAlignLabel = {
         let label = VerticalAlignLabel()
         label.text = "DescriptionLabel"
         label.numberOfLines = 3
@@ -111,7 +111,7 @@ open class ALKGenericCardCell: UICollectionViewCell {
         return label
     }()
     
-    open let titleStackView: UIStackView = {
+    open var titleStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.alignment = .fill
@@ -119,7 +119,7 @@ open class ALKGenericCardCell: UICollectionViewCell {
         return stackView
     }()
 
-    open let mainStackView: UIStackView = {
+    open var mainStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.alignment = .fill
@@ -128,7 +128,7 @@ open class ALKGenericCardCell: UICollectionViewCell {
         return stackView
     }()
 
-    open let buttonStackView: UIStackView = {
+    open var buttonStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.alignment = .fill
@@ -136,7 +136,7 @@ open class ALKGenericCardCell: UICollectionViewCell {
         return stackView
     }()
     
-    open let mainBackgroundView: UIView = {
+    open var mainBackgroundView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 5
         view.layer.borderColor = UIColor.lightGray.cgColor
@@ -369,7 +369,7 @@ public class VerticalAlignLabel: UILabel {
     }
 }
 
-class InsetLabel: UILabel {
+public class InsetLabel: UILabel {
     
     var insets = UIEdgeInsets()
     
@@ -383,11 +383,11 @@ class InsetLabel: UILabel {
         self.init(insets: insets)
     }
     
-    override func drawText(in rect: CGRect) {
+    override public func drawText(in rect: CGRect) {
         super.drawText(in: UIEdgeInsetsInsetRect(rect, insets))
     }
     
-    override var intrinsicContentSize: CGSize  {
+    override public var intrinsicContentSize: CGSize  {
         var size = super.intrinsicContentSize
         size.width += insets.left + insets.right
         size.height += insets.top + insets.bottom

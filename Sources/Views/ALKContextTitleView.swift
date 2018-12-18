@@ -13,7 +13,10 @@ public protocol ALKContextTitleViewType {
     func setupUI()
 }
 
+//customfix
+//open class ALKContextTitleView: UIView, ALKContextTitleViewType {
 open class ALKContextTitleView: UIStackView, ALKContextTitleViewType {
+//end
 
     private var viewModel: ALKContextTitleViewModelType?
 
@@ -24,6 +27,9 @@ open class ALKContextTitleView: UIStackView, ALKContextTitleViewType {
 
     public let titleLabel: UILabel = {
         let label = UILabel(frame: CGRect.zero)
+        //customfix
+//        label.numberOfLines = 0
+        //end
         label.setFont(UIFont.font(.normal(size: 14)))
         //customfix
 //        label.textColor = UIColor.white
@@ -64,12 +70,13 @@ open class ALKContextTitleView: UIStackView, ALKContextTitleViewType {
 
     override public init(frame: CGRect) {
         super.init(frame: frame)
+        setupConstraints()
     }
-    
-    required public init(coder: NSCoder) {
-        super.init(coder: coder)
+
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
-    
+
     //MARK: - Public Methods
 
     public func configureWith(value data: ALKContextTitleDataType) {
@@ -78,7 +85,6 @@ open class ALKContextTitleView: UIStackView, ALKContextTitleViewType {
     }
 
     open func setupUI() {
-        setupConstraints()
         let imageUrl = viewModel?.getTitleImageURL
         contextImageView.kf.setImage(with: imageUrl)
         titleLabel.text = viewModel?.getTitleText
